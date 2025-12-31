@@ -6,6 +6,7 @@ interface SongRequest {
   id: string;
   songName: string;
   artistName?: string;
+  artwork?: string;
   requestedBy: string;
   requestedAt: string;
   played: boolean;
@@ -95,11 +96,14 @@ export default function DJPage() {
       <header className="mb-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-display text-3xl sm:text-4xl tracking-wider glow-text-blue">
-              DJ PANEL
-            </h1>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🍷</span>
+              <h1 className="font-display text-2xl sm:text-3xl tracking-wider text-amber-400">
+                TAVERNETTA DJ
+              </h1>
+            </div>
             <p className="text-gray-500 text-sm mt-1">
-              Gestisci le richieste
+              Gestisci le richieste della serata
             </p>
           </div>
           <button
@@ -115,7 +119,7 @@ export default function DJPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-3 mb-6 animate-fade-in stagger-1">
         <div className="glass rounded-xl p-3 text-center">
-          <div className="text-2xl font-bold text-neon-blue">{stats.pending}</div>
+          <div className="text-2xl font-bold text-amber-400">{stats.pending}</div>
           <div className="text-xs text-gray-500 uppercase tracking-wider">In coda</div>
         </div>
         <div className="glass rounded-xl p-3 text-center">
@@ -123,7 +127,7 @@ export default function DJPage() {
           <div className="text-xs text-gray-500 uppercase tracking-wider">Suonate</div>
         </div>
         <div className="glass rounded-xl p-3 text-center">
-          <div className="text-2xl font-bold text-neon-pink">{stats.total}</div>
+          <div className="text-2xl font-bold text-gray-400">{stats.total}</div>
           <div className="text-xs text-gray-500 uppercase tracking-wider">Totali</div>
         </div>
       </div>
@@ -136,9 +140,10 @@ export default function DJPage() {
             onClick={() => setFilter(f)}
             className={`flex-1 py-2 px-4 rounded-xl text-sm font-medium transition-all duration-300 ${
               filter === f
-                ? 'bg-gradient-to-r from-neon-pink to-neon-purple glow-pink'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-dark-900'
                 : 'glass hover:bg-white/10'
             }`}
+            style={filter === f ? { boxShadow: '0 0 20px rgba(251, 191, 36, 0.3)' } : {}}
           >
             {f === 'pending' && '⏳ In Coda'}
             {f === 'played' && '✅ Suonate'}
@@ -151,7 +156,7 @@ export default function DJPage() {
       <div className="space-y-3 animate-fade-in stagger-3">
         {isLoading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin text-4xl">🎵</div>
+            <div className="inline-block animate-spin text-4xl">🍷</div>
             <p className="text-gray-500 mt-2">Caricamento...</p>
           </div>
         ) : requests.length === 0 ? (
@@ -166,13 +171,16 @@ export default function DJPage() {
               {filter === 'played' && 'Nessuna canzone suonata'}
               {filter === 'all' && 'Nessuna richiesta ancora'}
             </p>
+            <p className="text-gray-600 text-sm mt-2">
+              {filter === 'pending' && 'Aspettiamo le richieste dalla Tavernetta! 🍻'}
+            </p>
           </div>
         ) : (
           requests.map((request, index) => (
             <div
               key={request.id}
               className={`glass rounded-2xl p-4 transition-all duration-300 animate-slide-up ${
-                request.played ? 'opacity-60' : 'border-l-4 border-neon-pink'
+                request.played ? 'opacity-60' : 'border-l-4 border-amber-500'
               }`}
               style={{ animationDelay: `${index * 0.05}s` }}
             >
@@ -189,6 +197,19 @@ export default function DJPage() {
                   {request.played ? '✓' : '○'}
                 </button>
 
+                {/* Album Artwork */}
+                {request.artwork ? (
+                  <img 
+                    src={request.artwork} 
+                    alt="" 
+                    className={`w-12 h-12 rounded-lg flex-shrink-0 ${request.played ? 'opacity-50' : ''}`}
+                  />
+                ) : (
+                  <div className={`w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center flex-shrink-0 ${request.played ? 'opacity-50' : ''}`}>
+                    <span>🎵</span>
+                  </div>
+                )}
+
                 {/* Song Info */}
                 <div className="flex-grow min-w-0">
                   <h3 className={`font-semibold text-lg truncate ${
@@ -197,11 +218,11 @@ export default function DJPage() {
                     {request.songName}
                   </h3>
                   {request.artistName && (
-                    <p className="text-gray-400 text-sm truncate">
-                      🎤 {request.artistName}
+                    <p className={`text-sm truncate ${request.played ? 'text-gray-600' : 'text-gray-400'}`}>
+                      {request.artistName}
                     </p>
                   )}
-                  <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                     <span>👤 {request.requestedBy}</span>
                     <span>⏰ {formatTime(request.requestedAt)}</span>
                   </div>
@@ -224,7 +245,10 @@ export default function DJPage() {
       {showClearModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
           <div className="glass rounded-2xl p-6 max-w-sm w-full animate-slide-up">
-            <h2 className="font-display text-2xl mb-4">🗑️ PULISCI LISTA</h2>
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">🍷</span>
+              <h2 className="font-display text-2xl text-amber-400">PULISCI LISTA</h2>
+            </div>
             
             <div className="space-y-3">
               <button
@@ -260,11 +284,13 @@ export default function DJPage() {
 
       {/* Floating Refresh Indicator */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2">
-        <div className="glass rounded-full px-4 py-2 text-xs text-gray-500">
-          🔄 Auto-refresh ogni 3s
+        <div className="glass rounded-full px-4 py-2 text-xs text-gray-500 flex items-center gap-2">
+          <span>🍷</span>
+          <span>Tavernetta di Lapolla</span>
+          <span>•</span>
+          <span>🔄 Auto-refresh</span>
         </div>
       </div>
     </main>
   );
 }
-

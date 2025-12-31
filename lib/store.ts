@@ -5,6 +5,7 @@ export interface SongRequest {
   id: string;
   songName: string;
   artistName?: string;
+  artwork?: string;
   requestedBy: string;
   requestedAt: Date;
   played: boolean;
@@ -28,11 +29,12 @@ class SongRequestStore {
     return this.getAllRequests().filter(r => r.played);
   }
 
-  addRequest(songName: string, artistName?: string, requestedBy?: string): SongRequest {
+  addRequest(songName: string, artistName?: string, requestedBy?: string, artwork?: string): SongRequest {
     const request: SongRequest = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       songName: songName.trim(),
       artistName: artistName?.trim(),
+      artwork: artwork?.trim(),
       requestedBy: requestedBy?.trim() || 'Anonimo',
       requestedAt: new Date(),
       played: false,

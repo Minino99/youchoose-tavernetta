@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { songName, artistName, requestedBy } = body;
+    const { songName, artistName, requestedBy, artwork } = body;
 
     if (!songName || songName.trim() === '') {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const newRequest = songStore.addRequest(songName, artistName, requestedBy);
+    const newRequest = songStore.addRequest(songName, artistName, requestedBy, artwork);
     
     return NextResponse.json({ 
       success: true, 
