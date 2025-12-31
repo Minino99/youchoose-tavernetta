@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+  min-height: 100vh;
+  color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #12121a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff2d95, #9d4edd);
+  border-radius: 3px;
+}
+
+/* Glow effects */
+.glow-pink {
+  box-shadow: 0 0 20px rgba(255, 45, 149, 0.4),
+              0 0 40px rgba(255, 45, 149, 0.2),
+              0 0 60px rgba(255, 45, 149, 0.1);
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4),
+              0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+.glow-text-pink {
+  text-shadow: 0 0 10px rgba(255, 45, 149, 0.8),
+               0 0 20px rgba(255, 45, 149, 0.5),
+               0 0 30px rgba(255, 45, 149, 0.3);
+}
+
+.glow-text-blue {
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.8),
+               0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animated background */
+.bg-animated {
+  background: 
+    radial-gradient(ellipse at 20% 80%, rgba(255, 45, 149, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(157, 78, 221, 0.1) 0%, transparent 70%),
+    linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #0a0a0f 100%);
+  background-attachment: fixed;
+}
+
+/* Input focus styles */
+input:focus, textarea:focus {
+  outline: none;
+}
+
+/* Button press effect */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Stagger animation delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
