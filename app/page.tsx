@@ -2,6 +2,21 @@
 
 import { useState, useEffect, useRef } from 'react';
 
+const FRASI_SUCCESSO = [
+  "nicola ghostato dalla middona",
+  "tranquilli che elena raguso lo voleva",
+  "saronzi",
+  "Iun du e trè, quand ie bell a fè",
+  "Quatt cing e sei, Ci nan part si gay",
+  "Sett e iott, famm nu chinott",
+  "Ordine ricevuto! Ciola in arrivo al tavolo 11",
+  "Bvim... p chedda troj... d MAMT",
+  "Wagliò a rutt u cazz! Sindatil a cast",
+  "c'è il coprifuoco mi dispiace!",
+  "Spegnete quelle luci fredde",
+  "Falli un po'a più covti.... la bà",
+];
+
 interface SearchResult {
   id: number;
   songName: string;
@@ -21,6 +36,8 @@ export default function HomePage() {
   const [yourName, setYourName] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const [successPhrase, setSuccessPhrase] = useState('');
   const [error, setError] = useState('');
   
   // Autocomplete state
@@ -122,11 +139,23 @@ export default function HomePage() {
       });
 
       if (response.ok) {
+        // Seleziona una frase random
+        const randomPhrase = FRASI_SUCCESSO[Math.floor(Math.random() * FRASI_SUCCESSO.length)];
+        setSuccessPhrase(randomPhrase);
         setShowSuccess(true);
         setSelectedSong(null);
         setSearchQuery('');
         setSuggestions([]);
-        setTimeout(() => setShowSuccess(false), 3000);
+        setIsExiting(false);
+        // Dopo 6 secondi inizia l'animazione di uscita
+        setTimeout(() => {
+          setIsExiting(true);
+          // Dopo l'animazione di uscita (0.5s), nascondi il messaggio
+          setTimeout(() => {
+            setShowSuccess(false);
+            setIsExiting(false);
+          }, 500);
+        }, 6000);
       } else {
         const data = await response.json();
         setError(data.error || 'Errore durante l\'invio');
@@ -168,14 +197,26 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Success Message */}
+        {/* Success Message - Più prominente con frase divertente */}
         {showSuccess && (
-          <div className="mb-6 p-4 glass rounded-2xl border-neon-green/30 bg-neon-green/10 animate-slide-up">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🍻</span>
-              <div>
-                <p className="font-semibold text-neon-green">Richiesta inviata!</p>
-                <p className="text-sm text-gray-400">Il DJ la vedrà presto... salute!</p>
+          <div className={`mb-6 p-6 glass rounded-2xl border-2 border-neon-green/50 bg-neon-green/15 relative overflow-hidden ${isExiting ? 'animate-bounce-out' : 'animate-bounce-in'}`}
+               style={{ boxShadow: '0 0 40px rgba(34, 197, 94, 0.3), inset 0 0 30px rgba(34, 197, 94, 0.1)' }}>
+            {/* Confetti effect background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-2 left-4 text-2xl animate-float" style={{ animationDelay: '0s' }}>🎉</div>
+              <div className="absolute top-3 right-6 text-xl animate-float" style={{ animationDelay: '0.2s' }}>✨</div>
+              <div className="absolute bottom-2 left-8 text-lg animate-float" style={{ animationDelay: '0.4s' }}>🎊</div>
+              <div className="absolute bottom-3 right-4 text-xl animate-float" style={{ animationDelay: '0.3s' }}>🍻</div>
+            </div>
+            
+            <div className="relative z-10 text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-3xl animate-pulse">🔥</span>
+                <p className="font-display text-xl text-neon-green tracking-wide">RICHIESTA INVIATA!</p>
+                <span className="text-3xl animate-pulse">🔥</span>
+              </div>
+              <div className="bg-black/30 rounded-xl px-4 py-3 backdrop-blur-sm">
+                <p className="text-lg text-amber-200 font-medium italic">"{successPhrase}"</p>
               </div>
             </div>
           </div>
